@@ -44,57 +44,27 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
     override fun onRobotFocusGained(qiContext: QiContext) {
         // The robot focus is gained.
 
-        val testBtn = findViewById<Button>(R.id.testButton)
-        testBtn.setOnClickListener {
-
             // Create a phrase.
             val phrase: Phrase = Phrase("Hello To Proven!")
-
-            //determine language
-            val locale: Locale = Locale(Language.ENGLISH, Region.CANADA);
 
             // Build the action.
             val say: Say = SayBuilder.with(qiContext).withPhrase(phrase)
                 //prevent robot from gestures
-                .withBodyLanguageOption(BodyLanguageOption.DISABLED).build()
+                .build()
             // Run the action synchronously.
-            say.run()
+             say.run()
 
-            Toast.makeText(this, "The Robot succeeded to Say Hello To Proven!", Toast.LENGTH_LONG)
-                .show()
-
-            Log.i(TAG, "The Robot succeeded to Say Hello To Proven!")
-
-        }
         val animation: com.aldebaran.qi.sdk.`object`.actuation.Animation =
             AnimationBuilder.with(qiContext) // Create the builder with the context.
                 .withResources(R.raw.hello_a006) // Set the animation resource.
                 .build() // Build the animation.
-
-
-        // Add an on started listener to the animate action.
-        animate?.addOnStartedListener { Log.i(TAG, "Animation started.") }
-
-        // Run the animate action asynchronously.
         val animateFuture: Future<Void>? = animate?.async()?.run()
 
-        // Add a lambda to the action execution.
-        animateFuture?.thenConsume { future ->
-            if (future.isSuccess) {
-                Log.i(TAG, "Animation finished with success.")
-            } else if (future.hasError()) {
-                Log.e(TAG, "Animation finished with error.", future.error)
-
-            }
-        }
     }
 
 
     override fun onRobotFocusLost() {
         // The robot focus is lost.
-
-        // Remove on started listeners from the animate action.
-        animate?.removeAllOnStartedListeners()
     }
 
     override fun onRobotFocusRefused(reason: String) {
